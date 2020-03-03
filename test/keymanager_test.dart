@@ -4,10 +4,11 @@ import 'package:keymanager/keymanager.dart';
 void main() async {
 
   String mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
-  String ethereumWallet0privateKey = "e49c840fcb71fafcaa068c7d45a6b99f8d5b6064effe7d793b6490641e75cca8";
-  String ethereumWallet0publicKey = "30bfa6298178e3ab1f4a2e5d5c3c7d79505c0b3ef7958ac0fec319a67d3e47eb01f05a7059311a6d061b7a4c1eff38549909b0782256e22f748cb9e6f3c4c4a4";
+  String ethereumWallet0privateKey = "0xe49c840fcb71fafcaa068c7d45a6b99f8d5b6064effe7d793b6490641e75cca8";
+  String ethereumWallet0publicKey = "0x30bfa6298178e3ab1f4a2e5d5c3c7d79505c0b3ef7958ac0fec319a67d3e47eb01f05a7059311a6d061b7a4c1eff38549909b0782256e22f748cb9e6f3c4c4a4";
   String ethereumWallet0address = "0x9d9216e0a29468be1ecacc351ce3887be8a26222";
-
+  String signedMessage = "0x9cfd50e94fe93fd9d851085d119295e0b9c7a34ea5b8744fb359031c00ffcfd86455b222018c62607d8ea31d85d721ed73e34dd15cd4ca256c14438b870b9c7b1b";
+  
   final myKeyManager = new KeyManager(mnemonic);
   await myKeyManager.init();
 
@@ -24,13 +25,23 @@ void main() async {
   });
 
   test('Generates all 6 keys', () {
-    expect(myKeyManager.keys["wallet_privateKey"].length, 64);
-    expect(myKeyManager.keys["storage_privateKey"].length, 64);
-    expect(myKeyManager.keys["comms_privateKey"].length, 64);
+    expect(myKeyManager.keys["wallet_privateKey"].length, 66);
+    expect(myKeyManager.keys["storage_privateKey"].length, 66);
+    expect(myKeyManager.keys["comms_privateKey"].length, 66);
 
-    expect(myKeyManager.keys["wallet_publicKey"].length, 128);
-    expect(myKeyManager.keys["storage_publicKey"].length, 128);
-    expect(myKeyManager.keys["comms_publicKey"].length, 128);
+    expect(myKeyManager.keys["wallet_publicKey"].length, 130);
+    expect(myKeyManager.keys["storage_publicKey"].length, 130);
+    expect(myKeyManager.keys["comms_publicKey"].length, 130);
+  });
+
+  test('signPersonalMessage returns correct string', () {
+    String signed = myKeyManager.signPersonalMessage("Hello world", myKeyManager.keys["wallet_privateKey"]);
+    expect(signed, signedMessage);
+  });
+
+  test('getPublicKeyFromSignature returns correct address', () {
+    String address = myKeyManager.getPublicKeyFromSignature("Hello world", signedMessage);
+    expect(address, ethereumWallet0address);
   });
 
   // debug
@@ -42,5 +53,5 @@ void main() async {
   print("comms_privateKey:   " + myKeyManager.keys["comms_privateKey"]);
   print("comms_publicKey:    " + myKeyManager.keys["comms_publicKey"]);
 
-  
+
 }

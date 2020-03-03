@@ -5,8 +5,8 @@ import 'dart:typed_data';
 import 'package:convert/convert.dart';
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:bip39/bip39.dart' as bip39;
-import 'package:web3dart/web3dart.dart';
-import 'package:web3dart/crypto.dart';
+import 'package:ethereum_util/ethereum_util.dart';
+
 
 class KeyManager {
   bip32.BIP32 rootkey;
@@ -38,8 +38,7 @@ class KeyManager {
 
     this._keys["wallet_privateKey"] = this._getPrivate(keyWallet);
     this._keys["wallet_publicKey"] = this._privateToPublic(keyWallet);
-    String address = await this._publicKeyToAddress(keyWallet);
-    this._keys["wallet_address"] = address;
+    this._keys["wallet_address"] = this._publicKeyToAddress(keyWallet);
 
     this._keys["storage_privateKey"] = this._getPrivate(keyStorage);
     this._keys["storage_publicKey"] = this._privateToPublic(keyStorage);
@@ -49,24 +48,32 @@ class KeyManager {
   }
 
   String _getPrivate(dynamic _key) {
-    return hex.encode(_key.privateKey);
+    return bufferToHex(_key.privateKey);
   }
 
   String _privateToPublic(dynamic _key) {
-    return hex.encode(privateKeyBytesToPublic(_key.privateKey));
+    return bufferToHex(privateKeyToPublicKey(_key.privateKey));
   }
 
-  Future<String> _publicKeyToAddress(dynamic _key) async {
-    Credentials privateKey = EthPrivateKey.fromHex( this._getPrivate(_key) );
-    var address = await privateKey.extractAddress();
-    // privateKey.
-    // privateKeyBytesToPublic(hex.decode(key));
-
-    return address.toString();
+  String _publicKeyToAddress(dynamic _key) {
+    return bufferToHex(privateKeyToAddress(_key.privateKey));
   }
   
   HashMap<String,String> get keys {
     return this._keys;
+  }
+
+  String signPersonalMessage(String _message, String _privateKey) {
+    Uint8List msgHash = hashPersonalMessage(toBuffer(_message));
+    ECDSASignature signature = sign(msgHash, hex.decode(stripHexPrefix(_privateKey)));
+    return toRpcSig(signature.r, signature.s, signature.v);
+  }
+
+  String getPublicKeyFromSignature(String _message, String _signed) {
+    ECDSASignature signature = fromRpcSig(_signed);
+    Uint8List msgHash = hashPersonalMessage(toBuffer(_message));
+    Uint8List pubkey = recoverPublicKeyFromSignature(signature, msgHash);
+    return bufferToHex(publicKeyToAddress(pubkey));
   }
 
 }
