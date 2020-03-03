@@ -35,12 +35,12 @@ void main() async {
   });
 
   test('signPersonalMessage returns correct string', () {
-    String signed = myKeyManager.signPersonalMessage("Hello world", myKeyManager.keys["wallet_privateKey"]);
+    String signed = KeyManagerUtils.signPersonalMessage("Hello world", myKeyManager.keys["wallet_privateKey"]);
     expect(signed, signedMessage);
   });
 
   test('getPublicKeyFromSignature returns correct address', () {
-    String address = myKeyManager.getPublicKeyFromSignature("Hello world", signedMessage);
+    String address = KeyManagerUtils.getPublicKeyFromSignature("Hello world", signedMessage);
     expect(address, ethereumWallet0address);
   });
 

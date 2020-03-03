@@ -63,17 +63,20 @@ class KeyManager {
     return this._keys;
   }
 
-  String signPersonalMessage(String _message, String _privateKey) {
+}
+
+class KeyManagerUtils {
+
+  static String signPersonalMessage(String _message, String _privateKey) {
     Uint8List msgHash = hashPersonalMessage(toBuffer(_message));
     ECDSASignature signature = sign(msgHash, hex.decode(stripHexPrefix(_privateKey)));
     return toRpcSig(signature.r, signature.s, signature.v);
   }
 
-  String getPublicKeyFromSignature(String _message, String _signed) {
+  static String getPublicKeyFromSignature(String _message, String _signed) {
     ECDSASignature signature = fromRpcSig(_signed);
     Uint8List msgHash = hashPersonalMessage(toBuffer(_message));
     Uint8List pubkey = recoverPublicKeyFromSignature(signature, msgHash);
     return bufferToHex(publicKeyToAddress(pubkey));
   }
-
 }
