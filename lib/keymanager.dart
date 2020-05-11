@@ -31,48 +31,14 @@ class KeyManager {
 
   Future<void> init() async {
 
+    this.rootkey = bip32.BIP32.fromSeed(bip39.mnemonicToSeed(this._mnemonic));
+
     Uint8List seed = bip39.mnemonicToSeed(this._mnemonic);
-    print("seed:        "+bufferToHex(seed));
-
     this.rootkey = bip32.BIP32.fromSeed(seed);
-    
-    bip32.BIP32 rootkey = this.rootkey;
-    print("depth:        "+rootkey.depth.toString());
-    print("chainCode:    "+bufferToHex(rootkey.chainCode));
-    print("fingerprint:  "+bufferToHex(rootkey.fingerprint));
-    print("parentFinger: "+rootkey.parentFingerprint.toString());
-    print("index:        "+rootkey.index.toString());
-    print("network.wif:  "+rootkey.network.wif.toString());
-    print("network.bip32:"+rootkey.network.bip32.toString());
-    print("_getPrivate:  "+_getPrivate(rootkey));
-
-    bip32.BIP32 hDRootKey = this.rootkey.derivePath(this._derrivationPathWallet);
-
-    print("depth:        "+hDRootKey.depth.toString());
-    print("chainCode:    "+bufferToHex(hDRootKey.chainCode));
-    print("fingerprint:  "+bufferToHex(hDRootKey.fingerprint));
-    print("parentFinger: "+hDRootKey.parentFingerprint.toString());
-    print("index:        "+hDRootKey.index.toString());
-    print("network.wif:  "+hDRootKey.network.wif.toString());
-    print("network.bip32:"+hDRootKey.network.bip32.toString());
-    print("_getPrivate:  "+_getPrivate(hDRootKey));
-
-    bip32.BIP32 childKey = hDRootKey.derive(this._derrivationChildWallet);
-    print("depth:        "+childKey.depth.toString());
-    print("chainCode:    "+childKey.chainCode.toString());
-    print("fingerprint:  "+bufferToInt(childKey.fingerprint).toString());
-    print("parentFinger: "+childKey.parentFingerprint.toString());
-    print("index:        "+childKey.index.toString());
-    print("network.wif:  "+childKey.network.wif.toString());
-    print("network.bip32:"+childKey.network.bip32.toString());
-    print("_getPrivate:  "+_getPrivate(childKey));
 
     bip32.BIP32 keyWallet = this.rootkey.derivePath(this._derrivationPathWallet).derive(this._derrivationChildWallet);
     bip32.BIP32 keyStorage = this.rootkey.derivePath(this._derrivationPathStorage).derive(this._derrivationChildStorage);
     bip32.BIP32 keyComms = this.rootkey.derivePath(this._derrivationPathCommunication).derive(this._derrivationChildCommunication);
-
-
-
 
     this._keys["wallet_privateKey"] = this._getPrivate(keyWallet);
     this._keys["wallet_publicKey"] = this._privateToPublic(keyWallet);
