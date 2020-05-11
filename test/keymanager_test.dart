@@ -3,13 +3,15 @@ import 'package:keymanager/keymanager.dart';
 
 void main() async {
 
-  String mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
+//   String mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
+  String mnemonic = "skin opera hungry bundle relief meadow act unlock click only race whale";
   String ethereumWallet0privateKey = "0xe49c840fcb71fafcaa068c7d45a6b99f8d5b6064effe7d793b6490641e75cca8";
   String ethereumWallet0publicKey = "0x30bfa6298178e3ab1f4a2e5d5c3c7d79505c0b3ef7958ac0fec319a67d3e47eb01f05a7059311a6d061b7a4c1eff38549909b0782256e22f748cb9e6f3c4c4a4";
   String ethereumWallet0address = "0x9d9216e0a29468be1ecacc351ce3887be8a26222";
   String signedMessage = "0x9cfd50e94fe93fd9d851085d119295e0b9c7a34ea5b8744fb359031c00ffcfd86455b222018c62607d8ea31d85d721ed73e34dd15cd4ca256c14438b870b9c7b1b";
   
-  final myKeyManager = new KeyManager(mnemonic);
+  String mnemonic2 = "seat senior relief nation blade security wisdom coral place rely furnance umbrella";
+  final myKeyManager = new KeyManager(mnemonic2);
   await myKeyManager.init();
 
   test('Generates correct wallet 0 private key', () {
