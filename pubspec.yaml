@@ -2,6 +2,7 @@ name: keymanager
 description: Key Manager Library
 version: 0.0.5
 homepage: "https://github.com/mickys/keymanager-dart"
+publish_to: none
 
 environment:
   sdk: ">=2.16.2 <3.0.0"

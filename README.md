@@ -22,6 +22,6 @@ dependencies:
 
   keymanager:
     git:
-      url: https://github.com:mickys/keymanager-dart.git
+      url: https://github.com/mickys/keymanager-dart.git
       ref: master
 ```
