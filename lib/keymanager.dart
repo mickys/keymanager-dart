@@ -9,8 +9,8 @@ import 'package:ethereum_util/ethereum_util.dart';
 
 
 class KeyManager {
-  bip32.BIP32 rootkey;
-  String _mnemonic;
+  late bip32.BIP32 rootkey;
+  late String _mnemonic;
 
   String _derrivationPathWallet = 'm/44\'/60\'/0\'/0';
   int _derrivationChildWallet = 0;
@@ -73,7 +73,7 @@ class KeyManagerUtils {
 
   static String signPersonalMessage(String _message, String _privateKey) {
     Uint8List msgHash = hashPersonalMessage(toBuffer(_message));
-    ECDSASignature signature = sign(msgHash, hex.decode(stripHexPrefix(_privateKey)));
+    ECDSASignature signature = sign(msgHash, Uint8List.fromList(hex.decode(stripHexPrefix(_privateKey))));
     return toRpcSig(signature.r, signature.s, signature.v);
   }
 

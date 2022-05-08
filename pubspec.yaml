@@ -1,10 +1,10 @@
 name: keymanager
 description: Key Manager Library
 version: 0.0.5
-homepage:
+homepage: "https://github.com/mickys/keymanager-dart"
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.16.2 <3.0.0"
 
 dependencies:
   flutter:
