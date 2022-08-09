@@ -38,14 +38,24 @@ class KeyManager {
 
     bip32.BIP32 keyWallet = this.rootkey.derivePath(this._derrivationPathWallet).derive(this._derrivationChildWallet);
     bip32.BIP32 keyStorage = this.rootkey.derivePath(this._derrivationPathStorage).derive(this._derrivationChildStorage);
+    bip32.BIP32 keyStorageVdb =  this.rootkey.derivePath(this._derrivationPathStorage).derive(++this._derrivationChildStorage);
+    bip32.BIP32 keyStorageVdc =  this.rootkey.derivePath(this._derrivationPathStorage).derive(++this._derrivationChildStorage);
     bip32.BIP32 keyComms = this.rootkey.derivePath(this._derrivationPathCommunication).derive(this._derrivationChildCommunication);
 
     this._keys["wallet_privateKey"] = this._getPrivate(keyWallet);
     this._keys["wallet_publicKey"] = this._privateToPublic(keyWallet);
     this._keys["wallet_address"] = this._publicKeyToAddress(keyWallet);
 
-    this._keys["storage_privateKey"] = this._getPrivate(keyStorage);
-    this._keys["storage_publicKey"] = this._privateToPublic(keyStorage);
+    this._keys["storage_root_privateKey"] = this._getPrivate(keyStorage);
+    this._keys["storage_root_publicKey"] = this._privateToPublic(keyStorage);
+
+    this._keys["storage_vdb_privateKey"] = this._getPrivate(keyStorageVdb);
+    this._keys["storage_vdb_publicKey"] = this._privateToPublic(keyStorageVdb);
+
+    this._keys["storage_vdc_privateKey"] = this._getPrivate(keyStorageVdc);
+    this._keys["storage_vdc_publicKey"] = this._privateToPublic(keyStorageVdc);
+
+
     this._keys["comms_privateKey"] = this._getPrivate(keyComms);
     this._keys["comms_publicKey"] =this._privateToPublic(keyComms);
 
